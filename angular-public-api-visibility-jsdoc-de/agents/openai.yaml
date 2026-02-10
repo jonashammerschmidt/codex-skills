@@ -1,4 +1,0 @@
-interface:
-  display_name: "Angular Public API/JSDoc Assistent"
-  short_description: "Sichtbarkeit, JSDoc und Glossarpflege konsistent halten"
-  default_prompt: "Use $angular-public-api-visibility-jsdoc-de to update visibility modifiers, German JSDoc, and clarify+maintain glossary terms for these component files: <paths>."

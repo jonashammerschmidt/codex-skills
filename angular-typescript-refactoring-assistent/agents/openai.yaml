@@ -1,3 +1,0 @@
-interface:
-  display_name: "Angular/TS Refactoring Assistent"
-  short_description: "Refaktoriert Komponenten in Thin-Component- und Logic-Klassen-Muster"

@@ -1,9 +1,9 @@
 ---
-name: angular-typescript-refactoring-assistent
+name: angular-thin-component-refactor
 description: Refaktoriert Angular- und TypeScript-Komponenten in das Muster Thin Component plus ausgelagerte Feature- und Logic-Klassen, ohne Verhaltensänderung. Verwenden, wenn eine konkrete Komponente in klar getrennte Orchestrator-Komponente und plain TypeScript-Logikklassen umgebaut werden soll.
 ---
 
-# Angular/TypeScript Refactoring Assistent
+# Angular Thin-Component Refactor
 
 Refaktoriere eine übergebene Angular-Komponente in das Muster `Thin Component + ausgelagerte Feature/Logic-Klassen`.
 

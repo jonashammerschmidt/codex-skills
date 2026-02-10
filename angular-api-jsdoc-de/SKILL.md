@@ -1,9 +1,9 @@
 ---
-name: angular-public-api-visibility-jsdoc-de
+name: angular-api-jsdoc-de
 description: Standardisiert Angular- und TypeScript-Komponenten hinsichtlich API-Dokumentation und Sichtbarkeits-Ergaenzung. Verwenden, wenn fehlende `public`-Modifier gezielt fuer Consumer-relevante API-Mitglieder ergaenzt werden sollen, ohne bestehende Sichtbarkeiten zu verschärfen oder herabzustufen, und wenn deutschsprachige JSDoc-Kommentare mit konsistenter Ubiquitous Language erstellt oder vereinheitlicht werden sollen.
 ---
 
-# Angular Public API + JSDoc (DE)
+# Angular API/JSDoc (DE)
 
 Ueberarbeite uebergebene Angular-/TypeScript-Dateien so, dass Sichtbarkeit, API-Flaeche und JSDoc konsistent sind, ohne Verhaltensaenderung.
 
@@ -11,9 +11,10 @@ Ueberarbeite uebergebene Angular-/TypeScript-Dateien so, dass Sichtbarkeit, API-
 
 Erwarte vom Aufrufer mindestens:
 
-- Liste der zu bearbeitenden Komponenten-/Klassendateien.
+- Liste der zu bearbeitenden Komponenten-/Klassendateien und/oder Ziel-Ordner.
 
 Nutze kein hartcodiertes Glossar im Skill.
+- Bei Ordnern: rekursiv alle relevanten `*.ts`-Dateien unterhalb des angegebenen Ordners verarbeiten (mit Fokus auf Angular-Komponenten und zugehoerige Klassen).
 
 ## Glossar-Quelle (verpflichtend)
 
@@ -38,7 +39,7 @@ Nutze kein hartcodiertes Glossar im Skill.
 
 ## Workflow
 
-1. Analysiere jede Klasse in bestehender Reihenfolge der Member (nicht umsortieren).
+1. Ermittele die Ziel-Dateien aus den uebergebenen Dateien/Ordnern und analysiere jede Klasse in bestehender Reihenfolge der Member (nicht umsortieren).
 2. Identifiziere Member, die Teil der Consumer-API sind (z. B. Inputs/Outputs, bewusst von aussen nutzbare Methoden/Properties).
 3. Ergaenze fehlende Sichtbarkeit ausschliesslich in Richtung `public`, ohne die Reihenfolge der Deklarationen zu aendern.
 4. Erstelle oder ueberarbeite Klassen-JSDoc auf Deutsch: kurz und knapp erklaeren, was die Klasse im fachlichen/technischen Kontext tut, und bei Decorator-Klassen direkt ueber dem Decorator platzieren.
