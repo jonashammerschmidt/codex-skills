@@ -44,10 +44,11 @@ Nutze kein hartcodiertes Glossar im Skill.
 3. Ergänze fehlende Sichtbarkeit ausschließlich in Richtung `public`, ohne die Reihenfolge der Deklarationen zu ändern.
 4. Erstelle oder überarbeite Klassen-JSDoc auf Deutsch (mit korrekten Umlauten (`ä`, `ö`, `ü`, `Ä`, `Ö`, `Ü`) und `ß`): kurz und knapp erklären, was die Klasse im fachlichen/technischen Kontext tut, und bei Decorator-Klassen direkt über dem Decorator platzieren.
 5. Erstelle oder überarbeite JSDoc für API-relevante `public`-Member auf Deutsch (mit korrekten Umlauten (`ä`, `ö`, `ü`, `Ä`, `Ö`, `Ü`) und `ß`).
-6. Nutze bei Querverweisen `{@link ...}` auf verwandte Felder, Typen oder Klassen.
-7. Gleiche Formulierungen und Fachbegriffe gegen das Repo-Glossar aus.
-8. Erweitere das Repo-Glossar um neu geklärte Begriffe.
-9. Vermeide in Kommentaren und JSDoc gezielt die im Glossar gelisteten Synonyme aus `Zu vermeidende Synonyme`.
+6. Stelle bei Interfaces sicher, dass jede Property und jede Methode mit einem Kommentar versehen ist.
+7. Nutze bei Querverweisen `{@link ...}` auf verwandte Felder, Typen oder Klassen.
+8. Gleiche Formulierungen und Fachbegriffe gegen das Repo-Glossar aus.
+9. Erweitere das Repo-Glossar um neu geklärte Begriffe.
+10. Vermeide in Kommentaren und JSDoc gezielt die im Glossar gelisteten Synonyme aus `Zu vermeidende Synonyme`.
 
 ## Sichtbarkeitsregeln
 
@@ -66,6 +67,7 @@ Nutze kein hartcodiertes Glossar im Skill.
 - Erlaube englische Fachbegriffe nur, wenn sie im Repo-Glossar etabliert sind, oder sich auf Symbole bezogen wird.
 - Beschreibe Zweck und Wirkung präzise statt Implementierungsdetails.
 - Dokumentiere `public`-API vollständig und konsistent.
+- Bei Interfaces muss jede Property und jede Methode einen Kommentar haben.
 - Nutze `{@link TypOderMember}` für relevante Querverweise.
 - Nutze keine Begriffe aus der Glossar-Spalte `Zu vermeidende Synonyme`.
 - Ergänze bei Bedarf ein minimales Code-Beispiel für Komponenten, das deutsche Fachlichkeit zeigt (Domänensprache auf Deutsch), während technische Bestandteile wie Angular-/TypeScript-Symbole natürlich technisch benannt bleiben.
