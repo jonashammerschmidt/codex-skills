@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Upskiller"
+  short_description: "Verbessert bestehende Skills evidenzbasiert aus Session-Logs"
+  default_prompt: "Verbessere den Skill unter <SKILL_PATH> anhand lokaler Codex-Logs, schreibe ihn vollstaendig neu und liefere Evidence Summary, Updated SKILL FILE, Change Log und Added Files."

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Angular API/JSDoc (DE)"
+  display_name: "Angular JSDoc Writer"
   short_description: "Public API, JSDoc, Glossar konsistent"
   default_prompt: "Use $angular-api-jsdoc-de to update visibility modifiers, German JSDoc, and clarify+maintain glossary terms for these component files: <paths>."

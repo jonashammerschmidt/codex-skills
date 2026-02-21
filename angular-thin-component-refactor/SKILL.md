@@ -5,59 +5,119 @@ description: Refaktoriert Angular- und TypeScript-Komponenten in das Muster Thin
 
 # Angular Thin-Component Refactor
 
-Refaktoriere eine übergebene Angular-Komponente in das Muster `Thin Component + ausgelagerte Feature/Logic-Klassen`.
+## Purpose
 
-## Workflow
+Refaktoriere eine bestehende Angular-Komponente in das Muster `Thin Component + ausgelagerte Logic-Klassen`, ohne das Laufzeitverhalten oder die öffentliche API unerwartet zu ändern.
 
-1. Analysiere die Komponente und markiere Verantwortungen.
-2. Trenne orchestrierende Angular-Aufgaben von Fachlogik.
-3. Erzeuge oder erweitere plain TypeScript-Logikklassen nahe der Komponente, bevorzugt unter `./logic/`.
-4. Delegiere aus der Komponente in diese Klassen, ohne die öffentliche API der Komponente unerwartet zu ändern.
-5. Prüfe Verhalten, Lesbarkeit, Benennung und Architektur gegen die Regeln unten.
+## When to use
 
-## Refactoring-Regeln
+Nutze diesen Skill, wenn mindestens eine Bedingung erfüllt ist:
+1. Eine konkrete Komponente ist fachlich überladen und soll als Orchestrator verschlankt werden.
+2. Fachlogik soll in plain TypeScript-Klassen ausgelagert werden.
+3. Die bestehende API (Inputs, Outputs, öffentliche Handler) soll stabil bleiben.
+4. Der Nutzer verlangt explizit Thin-Component-Refactoring.
 
-### 1. Halte die Komponente als Orchestrator
+## When not to use
 
-- Belasse Angular-Metadaten, `inject()`, `input()`, `output()`, `viewChild`/`viewChildren` in der Komponente.
-- Belasse Template-nahe `computed()` Werte in der Komponente.
-- Belasse öffentliche Event-Handler in der Komponente und delegiere intern an Logic-Klassen.
+Nutze diesen Skill nicht, wenn:
+1. Ein vollständiges Redesign oder fachliche Verhaltensänderung gefordert ist.
+2. Keine konkrete Zielkomponente benannt oder ableitbar ist.
+3. Nur eine minimale lokale Korrektur ohne strukturelles Refactoring gewünscht ist.
+4. Eine globale Architektur-Migration über mehrere Domänen ohne klaren Scope verlangt wird.
 
-### 2. Lagere Fachlogik in plain TypeScript-Klassen aus
+## Inputs
 
-- Verwende in Logic-Klassen keine Angular-Decorator.
-- Platziere Logic-Klassen nah an der Komponente unter `./logic/` oder einem bestehenden Feature-Unterordner.
-- Gib jeder Klasse genau eine klar abgegrenzte Verantwortung.
+Erwarte vom Aufrufer:
+1. `TARGET_COMPONENT`: Pfad zur Komponente (`.ts`, optional Template/Styles im Umfeld).
+2. Optional `SCOPE_HINT`: Grenzen der Refaktorierung (z. B. nur eine Datei, nur bestimmte Verantwortungen).
+3. Optional `BEHAVIOR_CONSTRAINTS`: explizite No-Go-Änderungen.
 
-### 3. Übergib nur notwendige Abhängigkeiten
+Eingaberegeln:
+1. Wenn nur ein Ordner genannt ist, bestimme die primäre Zielkomponente eindeutig; sonst stoppen und Rückfrage stellen.
+2. Ändere nur Dateien im direkten Feature-Kontext der Zielkomponente.
+3. Keine stillen Scope-Erweiterungen auf weitere Features.
 
-- Übergib nur benötigte Signals, Services, Callbacks, `ElementRef` oder Utility-Abhängigkeiten per Konstruktor.
-- Verwende keine versteckten globalen Abhängigkeiten.
-- Wenn `effect()` in Logic-Klassen nötig ist, initialisiere das aus der Komponente heraus, z. B. mit `runInInjectionContext` und übergebenem `Injector`.
+## Outputs
 
-### 4. Halte Logic-APIs klein und testbar
+Liefere immer:
+1. Geänderte Komponentendatei(en) als Thin-Component-Orchestrator.
+2. Neue oder angepasste Logic-Klasse(n) nahe der Komponente, bevorzugt unter `./logic/`.
+3. Kurze Begründung der Verantwortungsaufteilung.
+4. Explizite Validierung, dass Verhalten und öffentliche API erhalten wurden.
+5. Liste offener Risiken oder nicht auflösbarer Grenzfälle (falls vorhanden).
 
-- Exponiere nur relevante readonly Signals/Computeds und klar benannte Methoden wie `setup`, `initialize`, `toggle`, `goUp`.
-- Halte Methoden klein, deterministisch und gut unit-testbar.
+## Procedure
 
-### 5. Halte Angular-Stil konsistent
+1. **Scope fixieren**
+- Identifiziere exakt eine Zielkomponente und ihre direkten Begleitdateien.
+- Stoppe bei mehrdeutigem Scope und fordere Klärung an.
 
-- Arbeite signals-first.
-- Nutze `ChangeDetectionStrategy.OnPush`.
-- Nutze keine `@HostBinding`/`@HostListener`.
-- Vermeide Logikaufblähung im Template.
+2. **Verantwortungen schneiden**
+- Markiere Angular-Orchestrierung vs. Fachlogik.
+- Behalte in der Komponente: Angular-Metadaten, `inject()`, `input()`, `output()`, `viewChild`/`viewChildren`, template-nahe `computed()`, öffentliche Event-Handler.
 
-### 6. Sichere Ergebnisqualität
+3. **Logic-Struktur festlegen**
+- Erzeuge oder erweitere plain TypeScript-Klassen im Feature-Kontext (`./logic/` bevorzugt).
+- Eine Klasse = eine klar abgegrenzte Verantwortung.
+- Keine Angular-Decorator in Logic-Klassen.
 
-- Verändere Verhalten nicht.
-- Verbessere Lesbarkeit der Komponente sichtbar.
-- Verwende konsistente Benennung entsprechend bestehender Muster wie `Selection`, `Focus`, `Sort`, `ActiveDescendant`.
+4. **Abhängigkeiten explizit übergeben**
+- Übergebe nur notwendige Signals, Services, Callbacks, `ElementRef` und Utilities per Konstruktor.
+- Keine versteckten globalen Abhängigkeiten.
+- Falls `effect()` in Logic nötig ist: Initialisierung aus der Komponente (z. B. via `runInInjectionContext` und `Injector`).
 
-## Ergebnisformat
+5. **Delegation implementieren**
+- Halte öffentliche Handler in der Komponente stabil und delegiere intern in Logic.
+- Exponiere in Logic nur kleine, testbare APIs (`initialize`, `setup`, `toggle`, etc.).
+- Vermeide Template-Logikaufblähung.
 
-Liefere die Refaktorierung mit:
+6. **Repo-Konventionen absichern**
+- Signals-first arbeiten.
+- `ChangeDetectionStrategy.OnPush` beibehalten/einhalten.
+- Kein `@HostBinding` oder `@HostListener`.
+- Domänenterminologie gemäß `docs/GLOSSAR.md` konsistent halten.
 
-- den geänderten Komponentendateien,
-- den neuen oder geänderten Logic-Klassen,
-- einer kurzen Begründung der Aufteilung,
-- einer kurzen Validierung, dass das Verhalten erhalten bleibt.
+7. **Abschlussprüfung durchführen**
+- Prüfe alle Punkte aus `Verification`.
+- Wenn Verhaltenserhalt nicht sicher belegbar ist, transparent markieren statt behaupten.
+
+## Edge Cases and Safety Checks
+
+1. **Mehrdeutiger Komponenten-Scope**
+- Nicht raten; stoppen und gezielte Rückfrage stellen.
+
+2. **Starke Seiteneffekte in bestehender Logik**
+- Reihenfolge und Triggerpunkte unverändert lassen.
+- Bei Unsicherheit konservativ delegieren und Risiko dokumentieren.
+
+3. **Tight Coupling mit Template**
+- Template-nahe `computed()` in der Komponente belassen.
+- Nur reine Fachtransformationen auslagern.
+
+4. **API-Risiko durch Refactor**
+- Keine unbeauftragte Umbenennung öffentlicher Member.
+- Keine Signaturänderungen ohne expliziten Auftrag.
+
+5. **Fehlende sichere Verifikation**
+- Keine unbelegte Gleichheitsbehauptung.
+- Explizit angeben, was nur statisch geprüft wurde.
+
+## Repo-Specific Conventions
+
+1. Bearbeite den produktiven Code unter `frontend/projects`.
+2. Wiederverwendbare Library-Änderungen liegen unter `frontend/projects/fst/common/src/lib`.
+3. Öffentliche Exporte bei Bedarf in `frontend/projects/fst/common/src/public-api.ts` synchron halten.
+4. Für nachvollziehbare manuelle Checks Demo-Anpassungen in `frontend/projects/fst-common-demo` berücksichtigen, wenn vom Refactor betroffen.
+5. Verwende Terminologie aus `docs/GLOSSAR.md` als Single Source of Truth.
+6. Führe keine Tests aus, außer der Nutzer fordert dies explizit an.
+
+## Verification
+
+Vor Abschluss müssen alle Punkte erfüllt oder als offen markiert sein:
+1. Die Komponente ist sichtbar dünner und primär Orchestrator.
+2. Ausgelagerte Logic enthält keine Angular-Decorator.
+3. Öffentliche API der Komponente blieb stabil (Namen, Signaturen, Bindings).
+4. Verhalten wurde nicht absichtlich verändert; kritische Flows wurden statisch gegengeprüft.
+5. Abhängigkeiten sind explizit und minimal übergeben; keine versteckten Globals.
+6. Angular-Konventionen sind eingehalten (`OnPush`, signals-first, keine Host-Decorator).
+7. Änderungen sind auf den definierten Scope begrenzt.
